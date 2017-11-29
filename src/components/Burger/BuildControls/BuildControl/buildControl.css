@@ -1,0 +1,63 @@
+.BuildControl {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    margin: 5px 0;
+}
+
+.BuildControl__button {
+    border: 1px solid #AA6817;
+    cursor: pointer;
+    display: block;
+    font: inherit;
+    margin: 0 5px;
+    outline: none;
+    padding: 5px;
+    width: 80px;
+}
+
+.BuildControl__button:disabled {
+    background-color: #AC9980;
+    border: 1px solid #7E7365;
+    color: #ccc;
+    cursor: default;
+}
+
+.BuildControl__button:hover:disabled {
+    background-color: #AC9980;
+    color: #ccc;
+    cursor: not-allowed;
+}
+
+.Label {
+    font-weight: bold;
+    padding: 10px;
+    width: 80px;
+}
+
+.BuildControl__Less,
+.BuildControl__More {
+    composes: BuildControl__button;
+}
+
+.BuildControl__Less {
+    background-color: #D39952;
+    color: white;
+}
+
+.BuildControl__More {
+    background-color: #8F5E1E;
+    color: white;
+}
+
+.BuildControl__Less:hover,
+.BuildControl__Less:active {
+    background-color: #DAA972;
+    color: white;
+}
+
+.BuildControl__More:hover,
+.BuildControl__More:active {
+    background-color: #99703F;
+    color: white;
+}
