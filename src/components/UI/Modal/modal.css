@@ -4,12 +4,19 @@
     box-shadow: 1px 1px 1px black;
     box-sizing: border-box;
     left: 15%;
+    opacity: 0;
     padding: 16px;
     position: fixed;
     top: 30%;
+    transform: translateY(-100vh);
     transition: all 0.3s ease-out;
     width: 70%;
     z-index: 500;
+}
+
+.show {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 @media (min-width: 600px) {

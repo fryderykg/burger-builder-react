@@ -1,14 +1,25 @@
 import React from 'react';
+import Aux from '../../../hoc/Aux';
+import Backdrop from '../Backdrop/Backdrop';
 import styles from './modal.css';
+import classNames from 'classnames/bind';
 
-const modal = (props) => (
-  <div className={styles.Modal}
-        style={{
-          transform: props.show ? 'translateY(0)': 'translateY(-100vh)',
-          opacity: props.show ? '1': '0'
-        }}>
-    {props.children}
-  </div>
-);
+const style = classNames.bind(styles);
+
+const modal = (props) => {
+  const className = style({
+    Modal: true,
+    show: props.show
+  });
+
+  return (
+    <Aux>
+      <Backdrop show={props.show} closeModal={props.closeSummary}/>
+      <div className={className}>
+        {props.children}
+      </div>
+    </Aux>
+  );
+};
 
 export default modal;
