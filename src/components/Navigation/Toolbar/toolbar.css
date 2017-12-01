@@ -1,6 +1,7 @@
 .Toolbar {
     align-items: center;
     background-color: #703b09;
+    box-sizing: border-box;
     display: flex;
     height:56px;
     justify-content: space-between;
@@ -14,4 +15,14 @@
 
 .Toolbar nav {
     height: 100%;
+}
+
+.LogoWrapper {
+    height: 80%;
+}
+
+@media (max-width: 499px) {
+    .DesktopOnly {
+        display: none;
+    }
 }
