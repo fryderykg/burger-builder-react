@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Aux from '../../../hoc/Aux';
 import Backdrop from '../Backdrop/Backdrop';
 import styles from './modal.css';
@@ -6,20 +6,27 @@ import classNames from 'classnames/bind';
 
 const style = classNames.bind(styles);
 
-const modal = (props) => {
-  const className = style({
-    Modal: true,
-    show: props.show
-  });
+class Modal extends Component {
 
-  return (
-    <Aux>
-      <Backdrop show={props.show} closeBackdrop={props.closeSummary}/>
-      <div className={className}>
-        {props.children}
-      </div>
-    </Aux>
-  );
-};
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextProps.show !== this.props.show
+  }
 
-export default modal;
+  render() {
+    const className = style({
+      Modal: true,
+      show: this.props.show
+    });
+
+    return (
+      <Aux>
+        <Backdrop show={this.props.show} closeBackdrop={this.props.closeSummary}/>
+        <div className={className}>
+          {this.props.children}
+        </div>
+      </Aux>
+    );
+  }
+}
+
+export default Modal;

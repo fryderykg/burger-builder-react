@@ -7,7 +7,7 @@
     opacity: 0;
     padding: 16px;
     position: fixed;
-    top: 30%;
+    top: 50%;
     transform: translateY(-100vh);
     transition: all 0.3s ease-out;
     width: 70%;
@@ -16,7 +16,7 @@
 
 .show {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(-50%);
 }
 
 @media (min-width: 600px) {
