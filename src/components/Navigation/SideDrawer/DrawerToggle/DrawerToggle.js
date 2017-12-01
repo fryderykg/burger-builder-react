@@ -3,7 +3,11 @@ import styles from './drawerToggle.css';
 
 const drawerToggle = (props) => {
   return (
-    <div onClick={props.open}>MENU</div>
+    <div className={styles.DrawerToggle} onClick={props.open}>
+      <div/>
+      <div/>
+      <div/>
+    </div>
   );
 };
 
