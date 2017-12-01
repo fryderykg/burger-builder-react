@@ -14,7 +14,7 @@ const modal = (props) => {
 
   return (
     <Aux>
-      <Backdrop show={props.show} closeModal={props.closeSummary}/>
+      <Backdrop show={props.show} closeBackdrop={props.closeSummary}/>
       <div className={className}>
         {props.children}
       </div>
