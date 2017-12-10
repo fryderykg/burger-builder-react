@@ -2,7 +2,7 @@ import React from 'react';
 import Styles from './order.css';
 
 const Order = (props) => {
-  console.log(props.ingredients);
+  // console.log(props.ingredients);
   let ingredients = [];
 
   for (let ingrName in props.ingredients) {
