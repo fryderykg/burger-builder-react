@@ -10,7 +10,7 @@ import Input from '../../../components/UI/Input/Input';
 import Styles from './contactData.css';
 
 class ContactData extends Component {
-  state ={
+  state = {
     orderForm: {
       name: {
         elementType: 'input',
@@ -68,13 +68,17 @@ class ContactData extends Component {
 
   orderHandler = (e) => {
     e.preventDefault();
-    this.setState({
-      loading: true
-    });
+    this.setState({loading: true});
+    const formData = {};
+
+    for (let element in this.state.orderForm) {
+      formData[element] = this.state.orderForm[element].value;
+    }
 
     const order = {
       ingredients: this.props.ingredients,
-      price: this.props.totalPrice,
+      price: this.props.price,
+      orderData: formData
     };
 
     axios.post('/orders.json', order)
@@ -111,9 +115,9 @@ class ContactData extends Component {
     ));
 
     let form = (
-      <form>
+      <form onSubmit={this.orderHandler}>
         {formElementsArr}
-        <Button btnType="Success" clicked={this.orderHandler}>ORDER</Button>
+        <Button btnType="Success">ORDER</Button>
       </form>
     );
     if (this.state.loading) {
