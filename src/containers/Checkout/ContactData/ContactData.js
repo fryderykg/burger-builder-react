@@ -18,7 +18,12 @@ class ContactData extends Component {
           type: 'text',
           placeholder: 'Your name'
         },
-        value: ''
+        value: '',
+        validation: {
+          required: true
+        },
+        valid: false,
+        edited: false
       },
       street: {
         elementType: 'input',
@@ -26,7 +31,12 @@ class ContactData extends Component {
           type: 'text',
           placeholder: 'Street'
         },
-        value: ''
+        value: '',
+        validation: {
+          required: true
+        },
+        valid: false,
+        edited: false
       },
       zipCode: {
         elementType: 'input',
@@ -34,7 +44,14 @@ class ContactData extends Component {
           type: 'text',
           placeholder: 'Zip code'
         },
-        value: ''
+        value: '',
+        validation: {
+          required: true,
+          minLength: 5,
+          maxLength: 5
+        },
+        valid: false,
+        edited: false
       },
       country: {
         elementType: 'input',
@@ -42,7 +59,12 @@ class ContactData extends Component {
           type: 'text',
           placeholder: 'Country'
         },
-        value: ''
+        value: '',
+        validation: {
+          required: true
+        },
+        valid: false,
+        edited: false
       },
       email: {
         elementType: 'input',
@@ -50,7 +72,12 @@ class ContactData extends Component {
           type: 'email',
           placeholder: 'Email'
         },
-        value: ''
+        value: '',
+        validation: {
+          required: true
+        },
+        valid: false,
+        edited: false
       },
       deliveryMethod: {
         elementType: 'select',
@@ -60,9 +87,12 @@ class ContactData extends Component {
             {displayValue: 'fastest', value: 'fastest'}
           ],
         },
-        value: ''
+        value: 'cheapest',
+        validation: {},
+        valid: true
       },
     },
+    formIsValid: false,
     loading: false
   };
 
@@ -92,6 +122,22 @@ class ContactData extends Component {
       });
   };
 
+  checkValidity(value, rules) {
+    let isValid = true;
+
+    if (rules.required) {
+      isValid = value.trim() !== '' && isValid
+    }
+    if (rules.minLength) {
+      isValid = value.length >= rules.minLength && isValid
+    }
+    if (rules.maxLength) {
+      isValid = value.length <= rules.maxLength && isValid
+    }
+
+    return isValid
+  }
+
   inputChangedHandler = (event, inputIdentifier) => {
     const updatedOrderForm = {...this.state.orderForm};
     const updatedFormElement = {
@@ -99,10 +145,24 @@ class ContactData extends Component {
     };
 
     updatedFormElement.value = event.target.value;
+    updatedFormElement.edited = true;
+
+    updatedFormElement.valid =
+      this.checkValidity(updatedFormElement.value, updatedFormElement.validation);
+
     updatedOrderForm[inputIdentifier] = updatedFormElement;
 
-    this.setState({orderForm: updatedOrderForm})
+    // Check validity for all inputs
+    let formIsValid = true;
+    for (let inputIdentifier in updatedOrderForm) {
+      formIsValid = updatedOrderForm[inputIdentifier].valid && formIsValid;
+    }
 
+
+    this.setState({
+      orderForm: updatedOrderForm,
+      formIsValid: formIsValid
+    })
   };
 
   render() {
@@ -111,13 +171,16 @@ class ContactData extends Component {
              elementType={this.state.orderForm[el].elementType}
              elementConfig={this.state.orderForm[el].elementConfig}
              value={this.state.orderForm[el].value}
+             invalid={!this.state.orderForm[el].valid}
+             shouldValidate={this.state.orderForm[el].validation}
+             edited={this.state.orderForm[el].edited}
              changed={(event) => this.inputChangedHandler(event, el)}/>
     ));
 
     let form = (
       <form onSubmit={this.orderHandler}>
         {formElementsArr}
-        <Button btnType="Success">ORDER</Button>
+        <Button btnType="Success" disabled={!this.state.formIsValid}>ORDER</Button>
       </form>
     );
     if (this.state.loading) {
