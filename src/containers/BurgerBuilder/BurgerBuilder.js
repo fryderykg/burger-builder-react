@@ -11,14 +11,11 @@ import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import axios from '../../axios-orders';
 import * as actionTypes from '../../store/actions';
 
-
 class BurgerBuilder extends Component {
   state = {
-    purchasable: false,
     purchasing: false,
     loading: false
   };
-
 
   showSummaryHandler = () => {
     this.setState({purchasing: true});
@@ -66,7 +63,7 @@ class BurgerBuilder extends Component {
         return sum + el;
       }, 0);
 
-    this.setState({purchasable: sum > 0});
+    return sum > 0;
   }
 
   render() {
@@ -97,7 +94,7 @@ class BurgerBuilder extends Component {
             ingredientAdded={this.props.onIngredientAdded}
             ingredientRemoved={this.props.onIngredientRemoved}
             disabled={disabledInfo}
-            purchasable={this.state.purchasable}
+            purchasable={this.updatePurchaseState(this.props.ings)}
             showSummary={this.showSummaryHandler}
             price={this.props.price}/>
         </Aux>
@@ -106,7 +103,8 @@ class BurgerBuilder extends Component {
 
     return (
       <Aux>
-        <Modal show={this.state.purchasing} closeSummary={this.hideSummaryHandler}>
+        <Modal show={this.state.purchasing}
+               closeSummary={this.hideSummaryHandler}>
           {orderSummary}
         </Modal>
         {burger}
@@ -135,4 +133,6 @@ const mapDispatchToProps = dispatch => {
   }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(BurgerBuilder, axios));
+export default connect(
+  mapStateToProps, mapDispatchToProps
+)(withErrorHandler(BurgerBuilder, axios));
