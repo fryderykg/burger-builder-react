@@ -2,13 +2,15 @@ import React, {Component} from 'react';
 import {withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
 import axios from '../../../axios-orders';
+import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
 
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Button from '../../../components/UI/Button/Button';
 import Input from '../../../components/UI/Input/Input';
 
-
 import Styles from './contactData.css';
+import * as actions from "../../../store/actions/index";
+
 
 class ContactData extends Component {
   state = {
@@ -99,7 +101,6 @@ class ContactData extends Component {
 
   orderHandler = (e) => {
     e.preventDefault();
-    this.setState({loading: true});
     const formData = {};
 
     for (let element in this.state.orderForm) {
@@ -112,18 +113,11 @@ class ContactData extends Component {
       orderData: formData
     };
 
-    axios.post('/orders.json', order)
-      .then(response => {
-        console.log(response);
-        this.setState({loading: false});
-        this.props.history.push('/')
-      })
-      .catch(error => {
-        this.setState({loading: false});
-      });
+    this.props.onOrderBurger(order);
+    // console.log(order)
   };
 
-  checkValidity(value, rules) {
+  checkValidity = (value, rules) => {
     let isValid = true;
 
     if (rules.required) {
@@ -137,7 +131,7 @@ class ContactData extends Component {
     }
 
     return isValid
-  }
+  };
 
   inputChangedHandler = (event, inputIdentifier) => {
     const updatedOrderForm = {...this.state.orderForm};
@@ -204,5 +198,11 @@ const mapStateToProps = state => {
   }
 };
 
+const mapDispatchToProps = dispatch => {
+  return {
+    onOrderBurger: (orderData) => dispatch(actions.purchaseBurgerStart(orderData))
+  }
+};
 
-export default connect(mapStateToProps)(withRouter(ContactData));
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(withErrorHandler(ContactData, axios)));
