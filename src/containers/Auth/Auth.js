@@ -2,6 +2,9 @@ import React, {Component} from 'react';
 import { connect }  from 'react-redux';
 import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
+import Spinner from '../../components/UI/Spinner/Spinner';
+import Aux from '../../hoc/Aux';
+
 import styles from './auth.css';
 
 import * as actions from '../../store/actions/index';
@@ -161,18 +164,41 @@ class Auth extends Component {
       </Button>
     );
 
-    return (
-      <div className={styles.Auth}>
+    let errorMessage = null;
+    if (this.props.error) {
+      errorMessage = (
+        <p>{this.props.error.message}</p>
+      )
+    }
+
+    let authPage = (
+      <Aux>
         {headerInfo}
+        {errorMessage}
         {form}
         {switchInfo}
         {switchModeBtn}
+      </Aux>
+    );
+
+    if (this.props.loading) {
+      authPage = <Spinner/>
+    }
+
+    return (
+      <div className={styles.Auth}>
+        {authPage}
       </div>
     );
   }
 }
 
-
+const mapStateToProps = state => {
+  return {
+    error: state.auth.error,
+    loading: state.auth.loading
+  }
+};
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -180,4 +206,4 @@ const mapDispatchToProps = dispatch => {
   }
 };
 
-export default connect(null, mapDispatchToProps)(Auth);
+export default connect(mapStateToProps, mapDispatchToProps)(Auth);
