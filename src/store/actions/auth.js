@@ -1,4 +1,5 @@
 import thunk from 'redux-thunk';
+import axios from 'axios';
 import * as actionTypes from './actionsTypes';
 
 export const authStart = () => {
@@ -21,9 +22,28 @@ export const authFail = (error) => {
   }
 };
 
-export const auth = (email, password) => {
+export const auth = (email, password, isSignup) => {
   return dispatch => {
-    console.log(email, password);
-    dispatch(authStart())
+    let URL = "https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyBD6Txb1Ro4AqMQgtLSSYpBYXFY3aN9XBI";
+
+    if(isSignup){
+      URL = "https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=AIzaSyBD6Txb1Ro4AqMQgtLSSYpBYXFY3aN9XBI";
+    }
+
+    const authData = {
+      email: email,
+      password: password,
+      returnSecureToken: true
+    };
+    dispatch(authStart());
+    axios.post(URL, authData)
+      .then(response => {
+        console.log(response);
+        dispatch(authSuccess(response.data))
+      })
+      .catch(error => {
+        console.log(error);
+        dispatch(authFail(error))
+      })
   }
 };

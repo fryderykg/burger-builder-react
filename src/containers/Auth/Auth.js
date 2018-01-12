@@ -39,7 +39,9 @@ class Auth extends Component {
         valid: false,
         edited: false
       },
-    }
+    },
+    isSignup: true,
+    formIsValid: false
   };
 
   checkValidity = (value, rules) => {
@@ -83,8 +85,15 @@ class Auth extends Component {
       }
     };
 
+    // Check validity for all inputs
+    let formIsValid = true;
+    for (let inputIdentifier in updatedControls) {
+      formIsValid = updatedControls[inputIdentifier].valid && formIsValid;
+    }
+
     this.setState({
-      controls: updatedControls
+      controls: updatedControls,
+      formIsValid: formIsValid
     });
   };
 
@@ -92,11 +101,28 @@ class Auth extends Component {
     event.preventDefault();
     this.props.onAuth(
       this.state.controls.email.value,
-      this.state.controls.password.value
+      this.state.controls.password.value,
+      this.state.isSignup
     )
   };
 
+  toggleAuthModeHandler = () => {
+    this.setState(prevState => {
+      return {
+        isSignup: !prevState.isSignup
+      }
+    })
+  };
+
   render() {
+    const headerInfo = (
+      <h1>
+        {this.state.isSignup
+        ? "Register Account"
+        : "Login to Your's Account"}
+      </h1>
+    );
+
     const formElementsArr = Object.keys(this.state.controls).map(el => (
       <Input key={el}
              elementType={this.state.controls[el].elementType}
@@ -109,20 +135,38 @@ class Auth extends Component {
         />
     ));
 
-    let form = (
+    const form = (
       <form onSubmit={this.submitHandler}>
         {formElementsArr}
         <Button btnType="Success"
-                // disabled={!this.state.formIsValid}
+          // disabled={!this.state.formIsValid}
         >
-          SUBMIT
+          {this.state.isSignup ? "REGISTER" : "LOGIN"}
         </Button>
       </form>
     );
 
+    const switchInfo = (
+      <div>
+        {this.state.isSignup
+        ? "Have a account?"
+        : "Don't have a account?"}
+      </div>
+    );
+
+    const switchModeBtn = (
+      <Button
+        btnType='Primary' clicked={this.toggleAuthModeHandler}>
+        {this.state.isSignup ? "Go to login page" : "Go to register page"}
+      </Button>
+    );
+
     return (
       <div className={styles.Auth}>
+        {headerInfo}
         {form}
+        {switchInfo}
+        {switchModeBtn}
       </div>
     );
   }
@@ -130,7 +174,7 @@ class Auth extends Component {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onAuth: (email, password) => dispatch(actions.auth(email, password))
+    onAuth: (email, password, isSignup) => dispatch(actions.auth(email, password, isSignup))
   }
 };
 
