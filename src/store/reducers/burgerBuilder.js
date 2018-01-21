@@ -2,7 +2,7 @@ import * as actionTypes from '../actions/actionsTypes';
 import {updateObject} from '../../shared/utility';
 
 const INGREDIENT_PRICES = {
-  salad: .5,
+  lettuce: .5,
   cheese: .4,
   meat: 1.3,
   bacon: .7
@@ -42,7 +42,7 @@ const setIngredient = (state, action) => {
   return {
     ...state,
     ingredients: {
-      salad: action.ingredients.salad,
+      lettuce: action.ingredients.lettuce,
       bacon: action.ingredients.bacon,
       cheese: action.ingredients.cheese,
       meat: action.ingredients.meat
